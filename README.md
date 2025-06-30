@@ -54,3 +54,16 @@ flake8>=7.3.0
 - Start building your Django recipe app inside the `app/` directory.
 - Add more dependencies as needed to `requirements.txt` or `requirements.dev.txt`.
 - Update this README as your project evolves.
+
+## Continuous Integration (GitHub Actions)
+
+This project uses a GitHub Actions workflow defined in `.github/workflows/checks.yml` to automate testing and linting on every push.
+
+**Workflow steps:**
+- Logs in to Docker Hub (using repository secrets)
+- Checks out the code
+- Builds the Docker containers with `docker-compose build`
+- Runs Django tests with `python manage.py test`
+- Runs code linting with `flake8`
+
+This ensures that all code pushed to the repository passes tests and style checks automatically.
