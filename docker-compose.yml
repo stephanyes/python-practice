@@ -10,8 +10,20 @@ services:
       - 8000:8000
     volumes:
       - ./app:/app
+    # command: >
+    #   sh -c "
+    #     until nc -z database 5432;
+    #     do
+    #       echo 'Esperando a que Postgres esté listo...';
+    #       sleep 2;
+    #     done;
+    #     python manage.py runserver 0.0.0.0:8000
+    #   "
     command: >
-      sh -c "python manage.py runserver 0.0.0.0:8000"
+      sh -c 
+        "python manage.py wait_for_db &&
+        python manage.py migrate &&
+        python manage.py runserver 0.0.0.0:8000"
     environment:
       - DB_HOST=database
       - DB_NAME=dev_db
@@ -21,7 +33,7 @@ services:
       - database
   
   database:
-    image: postgres:13-alpine
+    image: postgres:16-alpine
     volumes:
       - database-data:/var/lib/postgresql/data
     environment:
